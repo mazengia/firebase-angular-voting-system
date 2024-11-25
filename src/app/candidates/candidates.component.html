@@ -1,0 +1,10 @@
+<h2>Candidate List</h2>
+<ul>
+  <li *ngFor="let candidate of candidates">
+    <a [routerLink]="['/candidate', candidate?.id]">
+      <img [src]="candidate?.imageUrl" alt="Candidate" width="50" height="50" />
+      {{ candidate?.name }}
+    </a>
+  </li>
+</ul>
+<a routerLink="/add-candidate">Add New Candidate</a>

@@ -1,46 +1,57 @@
 import {
   AuthInstances
-} from "./chunk-M7ZQJ544.js";
+} from "./chunk-NOMRERYI.js";
+import "./chunk-HKJN53IQ.js";
 import {
-  Component,
   FirebaseApp,
   FirebaseApps,
+  VERSION,
+  ɵAngularFireSchedulers,
+  ɵAppCheckInstances,
+  ɵgetAllInstancesOf,
+  ɵgetDefaultInstanceOf,
+  ɵzoneWrap
+} from "./chunk-PMKT5NBC.js";
+import {
+  Component,
   FirebaseError,
   SDK_VERSION,
-  VERSION,
   _getProvider,
   _registerComponent,
   createMockUserToken,
   getApp,
   getDefaultEmulatorHostnameAndPort,
   getModularInstance,
-  registerVersion,
-  ɵAngularFireSchedulers,
-  ɵAppCheckInstances,
-  ɵgetAllInstancesOf,
-  ɵgetDefaultInstanceOf,
-  ɵzoneWrap
-} from "./chunk-7CR6DJSV.js";
+  registerVersion
+} from "./chunk-SRTFOQIQ.js";
+import "./chunk-G2U4YG7S.js";
 import {
   InjectionToken,
   Injector,
   NgModule,
   NgZone,
-  Observable,
   Optional,
-  __async,
+  makeEnvironmentProviders,
+  setClassMetadata,
+  ɵɵdefineInjector,
+  ɵɵdefineNgModule
+} from "./chunk-UNXLZ2XX.js";
+import "./chunk-VO6TUAQJ.js";
+import "./chunk-AWFYYL2G.js";
+import {
+  Observable,
   concatMap,
   distinct,
   from,
-  makeEnvironmentProviders,
   map,
-  setClassMetadata,
-  timer,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule
-} from "./chunk-XNSWX3JV.js";
+  timer
+} from "./chunk-YOCKVIPW.js";
+import "./chunk-D3QWRFYF.js";
+import {
+  __async
+} from "./chunk-35ENWJA4.js";
 
-// node_modules/@firebase/storage/dist/index.esm2017.js
+// node_modules/@angular/fire/node_modules/@firebase/storage/dist/index.esm2017.js
 var DEFAULT_HOST = "firebasestorage.googleapis.com";
 var CONFIG_STORAGE_BUCKET_KEY = "storageBucket";
 var DEFAULT_MAX_OPERATION_RETRY_TIME = 2 * 60 * 1e3;
@@ -2470,7 +2481,7 @@ var FirebaseStorageImpl = class {
   }
 };
 var name = "@firebase/storage";
-var version = "0.13.1";
+var version = "0.13.2";
 var STORAGE_TYPE = "storage";
 function getBytes(ref3, maxDownloadSizeBytes) {
   ref3 = getModularInstance(ref3);
@@ -2561,7 +2572,7 @@ function registerStorage() {
 }
 registerStorage();
 
-// node_modules/rxfire/storage/index.esm.js
+// node_modules/@angular/fire/node_modules/rxfire/storage/index.esm.js
 function fromTask(task) {
   return new Observable(function(subscriber) {
     var lastSnapshot = null;

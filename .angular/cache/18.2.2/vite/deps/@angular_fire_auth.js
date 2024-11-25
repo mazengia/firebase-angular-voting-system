@@ -1,42 +1,15 @@
 import {
-  AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY,
-  ActionCodeOperation,
-  ActionCodeURL,
   Auth,
-  AuthCredential,
   AuthInstances,
   AuthModule,
-  EmailAuthCredential,
-  EmailAuthProvider,
-  FacebookAuthProvider,
-  FactorId,
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  OAuthCredential,
-  OAuthProvider,
-  OperationType,
-  PhoneAuthCredential,
-  PhoneAuthProvider,
-  PhoneMultiFactorGenerator,
-  ProviderId,
-  RecaptchaVerifier,
-  SAMLAuthProvider,
-  SignInMethod,
-  TotpMultiFactorGenerator,
-  TotpSecret,
-  TwitterAuthProvider,
   applyActionCode,
   authInstance$,
   authState,
   beforeAuthStateChanged,
-  browserLocalPersistence,
-  browserPopupRedirectResolver,
-  browserSessionPersistence,
   checkActionCode,
   confirmPasswordReset,
   connectAuthEmulator,
   createUserWithEmailAndPassword,
-  debugErrorMap,
   deleteUser,
   fetchSignInMethodsForEmail,
   getAdditionalUserInfo,
@@ -46,8 +19,6 @@ import {
   getMultiFactorResolver,
   getRedirectResult,
   idToken,
-  inMemoryPersistence,
-  indexedDBLocalPersistence,
   initializeAuth,
   initializeRecaptchaConfig,
   isSignInWithEmailLink,
@@ -59,7 +30,6 @@ import {
   onAuthStateChanged,
   onIdTokenChanged,
   parseActionCodeURL,
-  prodErrorMap,
   provideAuth,
   reauthenticateWithCredential,
   reauthenticateWithPhoneNumber,
@@ -91,9 +61,48 @@ import {
   validatePassword,
   verifyBeforeUpdateEmail,
   verifyPasswordResetCode
-} from "./chunk-M7ZQJ544.js";
-import "./chunk-7CR6DJSV.js";
-import "./chunk-XNSWX3JV.js";
+} from "./chunk-NOMRERYI.js";
+import {
+  AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY,
+  ActionCodeOperation,
+  ActionCodeURL,
+  AuthCredential,
+  EmailAuthCredential,
+  EmailAuthProvider,
+  FacebookAuthProvider,
+  FactorId,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  OAuthCredential,
+  OAuthProvider,
+  OperationType,
+  PhoneAuthCredential,
+  PhoneAuthProvider,
+  PhoneMultiFactorGenerator,
+  ProviderId,
+  RecaptchaVerifier,
+  SAMLAuthProvider,
+  SignInMethod,
+  TotpMultiFactorGenerator,
+  TotpSecret,
+  TwitterAuthProvider,
+  browserLocalPersistence,
+  browserPopupRedirectResolver,
+  browserSessionPersistence,
+  debugErrorMap,
+  inMemoryPersistence,
+  indexedDBLocalPersistence,
+  prodErrorMap
+} from "./chunk-HKJN53IQ.js";
+import "./chunk-PMKT5NBC.js";
+import "./chunk-SRTFOQIQ.js";
+import "./chunk-G2U4YG7S.js";
+import "./chunk-UNXLZ2XX.js";
+import "./chunk-VO6TUAQJ.js";
+import "./chunk-AWFYYL2G.js";
+import "./chunk-YOCKVIPW.js";
+import "./chunk-D3QWRFYF.js";
+import "./chunk-35ENWJA4.js";
 export {
   ActionCodeOperation,
   ActionCodeURL,

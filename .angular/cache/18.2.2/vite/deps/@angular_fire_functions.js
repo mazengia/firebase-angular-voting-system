@@ -1,43 +1,54 @@
 import {
   AuthInstances
-} from "./chunk-M7ZQJ544.js";
+} from "./chunk-NOMRERYI.js";
+import "./chunk-HKJN53IQ.js";
 import {
-  Component,
   FirebaseApp,
   FirebaseApps,
-  FirebaseError,
   VERSION,
-  _getProvider,
-  _registerComponent,
-  getApp,
-  getDefaultEmulatorHostnameAndPort,
-  getModularInstance,
-  registerVersion,
   ɵAngularFireSchedulers,
   ɵAppCheckInstances,
   ɵgetAllInstancesOf,
   ɵgetDefaultInstanceOf,
   ɵzoneWrap
-} from "./chunk-7CR6DJSV.js";
+} from "./chunk-PMKT5NBC.js";
+import {
+  Component,
+  FirebaseError,
+  _getProvider,
+  _registerComponent,
+  getApp,
+  getDefaultEmulatorHostnameAndPort,
+  getModularInstance,
+  registerVersion
+} from "./chunk-SRTFOQIQ.js";
+import "./chunk-G2U4YG7S.js";
 import {
   InjectionToken,
   Injector,
   NgModule,
   NgZone,
   Optional,
-  __async,
+  makeEnvironmentProviders,
+  setClassMetadata,
+  ɵɵdefineInjector,
+  ɵɵdefineNgModule
+} from "./chunk-UNXLZ2XX.js";
+import "./chunk-VO6TUAQJ.js";
+import "./chunk-AWFYYL2G.js";
+import {
   concatMap,
   distinct,
   from,
-  makeEnvironmentProviders,
   map,
-  setClassMetadata,
-  timer,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule
-} from "./chunk-XNSWX3JV.js";
+  timer
+} from "./chunk-YOCKVIPW.js";
+import "./chunk-D3QWRFYF.js";
+import {
+  __async
+} from "./chunk-35ENWJA4.js";
 
-// node_modules/@firebase/functions/dist/index.esm2017.js
+// node_modules/@angular/fire/node_modules/@firebase/functions/dist/index.esm2017.js
 var LONG_TYPE = "type.googleapis.com/google.protobuf.Int64Value";
 var UNSIGNED_LONG_TYPE = "type.googleapis.com/google.protobuf.UInt64Value";
 function mapValues(o, f) {
@@ -415,7 +426,7 @@ function callAtURL(functionsInstance, url, data, options) {
   });
 }
 var name = "@firebase/functions";
-var version = "0.11.7";
+var version = "0.11.8";
 var AUTH_INTERNAL_NAME = "auth-internal";
 var APP_CHECK_INTERNAL_NAME = "app-check-internal";
 var MESSAGING_INTERNAL_NAME = "messaging-internal";
@@ -460,7 +471,7 @@ function httpsCallableFromURL(functionsInstance, url, options) {
 }
 registerFunctions(fetch.bind(self));
 
-// node_modules/rxfire/functions/index.esm.js
+// node_modules/@angular/fire/node_modules/rxfire/functions/index.esm.js
 function httpsCallable2(functions, name2, options) {
   var callable = httpsCallable(functions, name2, options);
   return function(data) {

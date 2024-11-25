@@ -7,9 +7,7 @@ import { Auth, authState, createUserWithEmailAndPassword, sendPasswordResetEmail
 })
 export class FireAuthService {
   private user: User | null = null;
-  constructor(
-    private auth: Auth
-  ) {
+  constructor(private auth: Auth) {
     this.listenToAuthStateChanges();
   }
 

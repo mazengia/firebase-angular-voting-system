@@ -26,7 +26,7 @@ export class SignUpComponent {
       this.authService.signUpWithEmailAndPassword(this.email, this.password).then(
         (user) => {
           console.log('User signed up successfully:', user);
-          this.router.navigate(['/home']);  // Redirect to home after successful sign up
+          this.router.navigate(['/sign-in']);  // Redirect to home after successful sign up
         },
         (error) => {
           this.errorMessage = error.message;
