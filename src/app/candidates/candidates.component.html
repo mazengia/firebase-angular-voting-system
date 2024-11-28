@@ -1,10 +1,28 @@
-<h2>Candidate List</h2>
-<ul>
-  <li *ngFor="let candidate of candidates">
-    <a [routerLink]="['/candidate', candidate?.id]">
-      <img [src]="candidate?.imageUrl" alt="Candidate" width="50" height="50" />
-      {{ candidate?.name }}
-    </a>
-  </li>
-</ul>
-<a routerLink="/add-candidate">Add New Candidate</a>
+<mat-toolbar color="primary" class="responsive-toolbar">
+  <button mat-icon-button class="menu-icon" *ngIf="isSmallScreen" (click)="toggleSideNav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Candidates</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/home">Home</button>
+  <button mat-button routerLink="/add-candidate">
+    Add Candidate
+  </button>
+</mat-toolbar>
+
+<div class="candidate-container">
+  <mat-card class="candidate-card" *ngFor="let candidate of candidates">
+    <mat-card-header>
+      <mat-card-title>{{ candidate?.name }}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="candidate?.imageUrl" alt="Candidate"/>
+    <mat-card-actions>
+      <button mat-button (click)="openDescriptionDialog(candidate?.description)">
+        View Slogan
+      </button>
+      <a mat-button [routerLink]="['/candidate', candidate?.id]">
+        Vote
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>

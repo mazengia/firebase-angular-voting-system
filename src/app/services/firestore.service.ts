@@ -1,58 +1,80 @@
-import { Injectable } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, setDoc, updateDoc, query, where, getDocs } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDocFromServer,
+  getDocs,
+  updateDoc
+} from '@angular/fire/firestore';
+import {Observable} from "rxjs";
+import {Candidate} from "../model/Candidate";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-  constructor(private firestore: Firestore) { }
-
-  // Create a new document in Firestore
-  private async createDocument(docPath: string, data: any): Promise<void> {
-    const docReference = doc(this.firestore, docPath);
-    await setDoc(docReference, data);
+  constructor(
+    private firestore: Firestore
+  ) {
   }
 
-  // Add a new document to a collection
-  private async addDocument(collectionPath: string, data: any): Promise<string> {
+  async addNewRecord(newData: Candidate): Promise<void> {
+    try {
+      const collectionRef = collection(this.firestore, 'candidates');
+      const docRef = await addDoc(collectionRef, newData);
+      console.log("Document added with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      throw error;
+    }
+  }
+
+
+  getAllCandidates(): Observable<Candidate[]> {
+    const collectionRef = collection(this.firestore, 'candidates');
+
+    return new Observable((observer) => {
+      getDocs(collectionRef)
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            observer.next([]); // No data found, return empty array
+          } else {
+            const candidates = querySnapshot.docs.map(doc => doc.data() as Candidate);
+            observer.next(candidates); // Emit the candidate data
+          }
+        })
+        .catch((error) => {
+          console.error('Error getting candidates:', error);
+          observer.next([]); // In case of error, return empty array
+        });
+    });
+  }
+
+
+  private async addDocument(collectionPath: string, data: any) {
     const collectionRef = collection(this.firestore, collectionPath);
-    const docRef = await addDoc(collectionRef, data);
-    return docRef.id;
+    const doc = await addDoc(collectionRef, data);
+    return doc.id;
   }
 
-  // Get a single document from Firestore
   private async getDocument<T>(docPath: string): Promise<T | null> {
     const docReference = doc(this.firestore, docPath);
-    const docSnap = await getDoc(docReference);
+    const docSnap = await getDocFromServer(docReference);
     if (docSnap.exists()) {
       return docSnap.data() as T;
     }
     return null;
   }
 
-
-
-  // Get nearby restaurants (example with filtering or geolocation query)
-  getNearbyRestaurants(): void {
-    const collectionRef = collection(this.firestore, 'candidates');
-    const nearbyQuery = query(collectionRef, where("location", "==", "nearby")); // Example query
-    getDocs(nearbyQuery).then((querySnapshot) => {
-      querySnapshot.docs.forEach((doc) => {
-        const restaurantData = doc.data();
-        console.log("Nearby restaurant:", restaurantData);
-      });
-    });
-  }
-
-  // Update an existing document in Firestore
-  private async updateDocument(docPath: string, data: any): Promise<void> {
-    const docRef = doc(this.firestore, docPath);
+  private async updateDocument(collectionPath: string, data: any): Promise<void> {
+    const docRef = doc(this.firestore, collectionPath);
     await updateDoc(docRef, data);
   }
 
-  // Delete a document from Firestore
   private async deleteDocument(docPath: string): Promise<void> {
     const docRef = doc(this.firestore, docPath);
     await deleteDoc(docRef);
