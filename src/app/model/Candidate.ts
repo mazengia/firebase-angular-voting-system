@@ -4,4 +4,7 @@ export interface Candidate {
   name: string;
   description: string;
   imageUrl: string;
+  documentId:string;
+  voteCount:number;
+  percentage:any;
 }

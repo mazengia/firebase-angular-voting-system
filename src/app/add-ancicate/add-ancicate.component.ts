@@ -49,6 +49,9 @@ export class AddAncicateComponent {
       name: this.name,
       description: this.description,
       imageUrl: this.imageUrl,
+      documentId: "",
+      voteCount:0,
+      percentage:0
     };
 
     try {

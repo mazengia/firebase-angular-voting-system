@@ -16,13 +16,14 @@
       <mat-card-title>{{ candidate?.name }}</mat-card-title>
     </mat-card-header>
     <img mat-card-image [src]="candidate?.imageUrl" alt="Candidate"/>
+    <p> {{ candidate?.percentage=="NaN"?0:candidate?.percentage }}%</p>
     <mat-card-actions>
       <button mat-button (click)="openDescriptionDialog(candidate?.description)">
         View Slogan
       </button>
-      <a mat-button [routerLink]="['/candidate', candidate?.id]">
+      <button mat-button color="primary" (click)="vote(candidate?.documentId)"  >
         Vote
-      </a>
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

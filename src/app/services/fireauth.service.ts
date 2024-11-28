@@ -3,6 +3,8 @@ import {
   Auth, authState, createUserWithEmailAndPassword, sendPasswordResetEmail,
   signInWithEmailAndPassword, User, UserCredential
 } from '@angular/fire/auth';
+import {map} from "rxjs/operators";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +54,8 @@ export class FireAuthService {
   }
 
   getCurrentUser() {
-    return this.auth.currentUser;
+    return this.auth.currentUser?.uid;
   }
+
+
 }

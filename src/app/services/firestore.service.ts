@@ -4,10 +4,10 @@ import {
   collection,
   deleteDoc,
   doc,
-  Firestore,
+  Firestore, getDoc,
   getDocFromServer,
-  getDocs,
-  updateDoc
+  getDocs, increment, query,
+  updateDoc, where
 } from '@angular/fire/firestore';
 import {Observable} from "rxjs";
 import {Candidate} from "../model/Candidate";
@@ -32,19 +32,42 @@ export class FirestoreService {
       throw error;
     }
   }
-
+  // Record the user's vote in Firestore
+  async recordVote(userId: string, candidateId: string): Promise<void> {
+      await addDoc(collection(this.firestore, 'userVotes'), {
+        userId: userId,
+        candidateId: candidateId,
+        timestamp: new Date(),
+      });
+  }
 
   getAllCandidates(): Observable<Candidate[]> {
     const collectionRef = collection(this.firestore, 'candidates');
-
     return new Observable((observer) => {
       getDocs(collectionRef)
         .then((querySnapshot) => {
           if (querySnapshot.empty) {
             observer.next([]); // No data found, return empty array
           } else {
-            const candidates = querySnapshot.docs.map(doc => doc.data() as Candidate);
-            observer.next(candidates); // Emit the candidate data
+            // Calculate total votes
+            const candidates = querySnapshot.docs.map(doc => {
+              const candidate = doc.data() as Candidate;
+              candidate.documentId = doc.id;  // Attach the documentId to the candidate
+              return candidate;
+            });
+
+            const totalVotes = candidates.reduce((sum, candidate) => sum + (candidate.voteCount || 0), 0);
+
+            // Calculate the percentage for each candidate
+            const candidatesWithPercentage = candidates.map(candidate => {
+              const percentage = totalVotes > 0 ? (candidate.voteCount / totalVotes) * 100 : 0;
+              return {
+                ...candidate,
+                percentage: percentage.toFixed(2),  // Round to two decimal places
+              };
+            });
+
+            observer.next(candidatesWithPercentage); // Emit the candidate data with percentage
           }
         })
         .catch((error) => {
@@ -53,6 +76,41 @@ export class FirestoreService {
         });
     });
   }
+
+
+  incrementVote(candidateId: string): Promise<void> {
+    const candidateRef = doc(this.firestore, 'candidates', candidateId);
+
+    return getDoc(candidateRef)  // Check if the candidate document exists
+      .then(docSnap => {
+        if (!docSnap.exists()) {
+          console.error(`Candidate with ID ${candidateId} does not exist.`);
+          throw new Error(`Candidate with ID ${candidateId} does not exist.`);
+        }
+
+        // If the candidate exists, increment the vote count
+        return updateDoc(candidateRef, {
+          voteCount: increment(1), // Increment vote count
+        });
+      })
+      .catch(error => {
+        console.error('Error incrementing vote:', error);
+        throw error; // Rethrow error after logging it
+      });
+  }
+
+
+  // Check if the user has already voted
+  hasVoted(userId: string): Promise<boolean> {
+    const userVotesQuery = query(
+      collection(this.firestore, 'userVotes'),
+      where('userId', '==', userId)
+    );
+
+    return getDocs(userVotesQuery).then((snapshot) => !snapshot.empty); // Returns true if the user has voted
+  }
+
+
 
 
   private async addDocument(collectionPath: string, data: any) {
@@ -79,4 +137,6 @@ export class FirestoreService {
     const docRef = doc(this.firestore, docPath);
     await deleteDoc(docRef);
   }
+
+
 }
