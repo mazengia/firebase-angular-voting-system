@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {FireAuthService} from "../services/fireauth.service";
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
+import {Users} from "../model/user";
 
 @Component({
   selector: 'app-sign-up',
@@ -15,17 +16,28 @@ import {NgIf} from "@angular/common";
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent {
+  user!: Users;
+  name: string = '';
+  role: string = 'voter';
   email = '';
   password = '';
   errorMessage = '';
 
-  constructor(private authService: FireAuthService, private router: Router) {}
+
+  constructor(private authService: FireAuthService, private router: Router) {
+  }
 
   signUp() {
     if (this.email && this.password) {
-      this.authService.signUpWithEmailAndPassword(this.email, this.password).then(
+      const newUser: Users = {
+        name: this.name,
+        role: this.role,
+        email: this.email,
+        password: this.password,
+        createdAt: new Date().toISOString(),
+      };
+      this.authService.signUpWithEmailAndPassword(newUser).then(
         (user) => {
-          console.log('User signed up successfully:', user);
           this.router.navigate(['/sign-in']);  // Redirect to home after successful sign up
         },
         (error) => {

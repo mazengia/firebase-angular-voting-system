@@ -6,22 +6,32 @@ import {
   doc,
   Firestore, getDoc,
   getDocFromServer,
-  getDocs, increment, query,
+  getDocs, increment, query, setDoc,
   updateDoc, where
 } from '@angular/fire/firestore';
 import {Observable} from "rxjs";
 import {Candidate} from "../model/Candidate";
+import {Users} from "../model/user";
+import {Auth, UserCredential} from "@angular/fire/auth";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-  constructor(
-    private firestore: Firestore
-  ) {
+  constructor(private firestore: Firestore,private auth: Auth) {
   }
-
+  async getUserRole(): Promise<string | null> {
+    const user = this.auth.currentUser;
+    if (user) {
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        return userDoc.data()['role'] as string;
+      }
+    }
+    return null; // Return null if no user is logged in or no role found
+  }
   async addNewRecord(newData: Candidate): Promise<void> {
     try {
       const collectionRef = collection(this.firestore, 'candidates');
@@ -32,13 +42,27 @@ export class FirestoreService {
       throw error;
     }
   }
+
+  async addNewUser(user: Users,cred: UserCredential): Promise<void> {
+    try {
+
+      const userDoc = doc(this.firestore, `users/${cred.user.uid}`);
+      await setDoc(userDoc, user);
+
+      alert('Signup successful!');
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      throw error;
+    }
+  }
+
   // Record the user's vote in Firestore
   async recordVote(userId: string, candidateId: string): Promise<void> {
-      await addDoc(collection(this.firestore, 'userVotes'), {
-        userId: userId,
-        candidateId: candidateId,
-        timestamp: new Date(),
-      });
+    await addDoc(collection(this.firestore, 'userVotes'), {
+      userId: userId,
+      candidateId: candidateId,
+      timestamp: new Date(),
+    });
   }
 
   getAllCandidates(): Observable<Candidate[]> {
@@ -109,8 +133,6 @@ export class FirestoreService {
 
     return getDocs(userVotesQuery).then((snapshot) => !snapshot.empty); // Returns true if the user has voted
   }
-
-
 
 
   private async addDocument(collectionPath: string, data: any) {

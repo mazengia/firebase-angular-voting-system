@@ -5,6 +5,8 @@ import {
 } from '@angular/fire/auth';
 import {map} from "rxjs/operators";
 import {Observable} from "rxjs";
+import {Users} from "../model/user";
+import {FirestoreService} from "./firestore.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ import {Observable} from "rxjs";
 export class FireAuthService {
   private user: User | null = null;
 
-  constructor(private auth: Auth) {
+  constructor(private auth: Auth, private firestoreService: FirestoreService) {
     this.listenToAuthStateChanges();
   }
 
@@ -27,12 +29,11 @@ export class FireAuthService {
     });
   }
 
-  public async signUpWithEmailAndPassword(email: string, password: string): Promise<UserCredential> {
+  public async signUpWithEmailAndPassword(user: Users): Promise<UserCredential> {
     const cred = await createUserWithEmailAndPassword(
-      this.auth,
-      email, password
-    );
+      this.auth, user.email, user.password);
     if (cred?.user) {
+      await this.firestoreService.addNewUser(user, cred)
       this.user = cred.user;
     }
     return cred;

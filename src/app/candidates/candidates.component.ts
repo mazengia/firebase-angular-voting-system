@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NgFor, NgIf} from '@angular/common';
 import {FirestoreService} from '../services/firestore.service';
 import {Candidate} from '../model/Candidate';
@@ -11,7 +11,7 @@ import {
   MatCardImage,
   MatCardTitle
 } from "@angular/material/card";
-import { MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {
   MAT_DIALOG_DATA, MatDialog,
@@ -49,8 +49,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   candidates: Candidate[] = [];
   private candidatesSubscription: Subscription | undefined;
   userId: any = '';
+  currentUser: any;
+  role: string | null = null;
 
-  constructor(private firestoreService: FirestoreService, private authService: FireAuthService, private dialog: MatDialog, private breakpointObserver: BreakpointObserver) {
+  constructor(private firestoreService: FirestoreService, private router: Router, private authService: FireAuthService, private dialog: MatDialog, private breakpointObserver: BreakpointObserver) {
+
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   ngOnInit(): void {
@@ -58,7 +62,10 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       this.isSmallScreen = result.matches;
     });
     this.userId = this.authService.getCurrentUser();
-
+    this.firestoreService.getUserRole().then(
+      (role:any) => {
+        this.role = role;
+      });
 
     this.getAllCandidates();
   }
@@ -67,10 +74,22 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     // Logic for toggling the sidenav
   }
 
+
+  openDescriptionDialog(description: any): void {
+    this.dialog.closeAll();
+    this.dialog.open(DescriptionDialogComponent, {
+      data: {description},
+      width: '400px',
+      disableClose: true,
+      panelClass: 'centered-dialog',
+    });
+  }
+
+
   getAllCandidates() {
     this.candidatesSubscription = this.firestoreService.getAllCandidates().subscribe(
       (candidates: Candidate[]) => {
-        console.log("candidates=",candidates)
+        console.log("candidates=", candidates)
         this.candidates = candidates;
       },
       (error) => {
@@ -85,29 +104,19 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDescriptionDialog(description: any): void {
-    this.dialog.open(DescriptionDialogComponent, {
-      data: {description},
-      width: '400px', // Adjust the width of the popup
-    });
-  }
-
-
 
   vote(candidateId: any) {
-    console.log("candidateId=",candidateId)
+    console.log("candidateId=", candidateId)
     this.firestoreService.hasVoted(this.userId).then(hasVoted => {
       if (hasVoted) {
         alert('You have already voted!');
       } else {
-        // The user has not voted, so proceed with the vote
         this.firestoreService.incrementVote(candidateId)
           .then(() => {
             // Store the vote in the userVotes collection
             this.firestoreService.recordVote(this.userId, candidateId)
               .then(() => {
                 console.log('Vote recorded');
-                // Optionally, refresh candidates or show a success message
                 this.getAllCandidates(); // Reload the candidates after voting
               })
               .catch(error => {
@@ -122,6 +131,12 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       console.error('Error checking if user has voted:', error);
     });
   }
+
+  logout() {
+    this.authService.signOut().then(res => {
+      this.router.navigate(['/sign-in']);
+    });
+  }
 }
 
 
@@ -129,13 +144,18 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   selector: 'app-description-dialog',
   standalone: true,
   template: `
-    <h2 mat-dialog-title>Slogan</h2>
-    <mat-dialog-content>
-      <p>{{ data.description }}</p>
+    <body align="center">
+    <h2 mat-dialog-title>Slogan Description</h2>
+    <mat-dialog-content class="mat-typography">
+      <p>
+        {{ data.description }}
+      </p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Close</button>
+      <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
+    </body>
+
   `,
   imports: [
     MatDialogContent,

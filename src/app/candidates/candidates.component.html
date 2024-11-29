@@ -5,9 +5,10 @@
   <span>Candidates</span>
   <span class="spacer"></span>
   <button mat-button routerLink="/home">Home</button>
-  <button mat-button routerLink="/add-candidate">
+  <button *ngIf="this.role=='member'" mat-button routerLink="/add-candidate">
     Add Candidate
   </button>
+  <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>
 
 <div class="candidate-container">
@@ -16,14 +17,27 @@
       <mat-card-title>{{ candidate?.name }}</mat-card-title>
     </mat-card-header>
     <img mat-card-image [src]="candidate?.imageUrl" alt="Candidate"/>
-    <p> {{ candidate?.percentage=="NaN"?0:candidate?.percentage }}%</p>
+    <p> {{ candidate?.percentage == "NaN" ? 0 : candidate?.percentage }}%</p>
     <mat-card-actions>
-      <button mat-button (click)="openDescriptionDialog(candidate?.description)">
+      <button class="btn-slogan" mat-button (click)="openDescriptionDialog(candidate?.description)">
         View Slogan
       </button>
-      <button mat-button color="primary" (click)="vote(candidate?.documentId)"  >
+      <button *ngIf="this.role=='voter'" class="btn-vote" mat-flat-button color="primary"
+              (click)="vote(candidate?.documentId)">
         Vote
+      </button>
+      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
+              color="primary" (click)="vote(candidate?.documentId)">
+        Edit
+      </button>
+      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
+              color="primary" (click)="vote(candidate?.documentId)">
+        Delete
       </button>
     </mat-card-actions>
   </mat-card>
 </div>
+
+
+
+
