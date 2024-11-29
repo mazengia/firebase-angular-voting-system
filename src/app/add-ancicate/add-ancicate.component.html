@@ -1,0 +1,16 @@
+<h2>Add New Candidate</h2>
+<form (ngSubmit)="addCandidate()">
+  <div>
+    <label for="name">FullName:</label>
+    <input type="text" id="name" [(ngModel)]="name" name="name" required />
+  </div>
+  <div>
+    <label for="description">Slogan:</label>
+    <textarea id="description" [(ngModel)]="description" name="description" required></textarea>
+  </div>
+  <div>
+    <label for="imageUrl">Image:</label>
+    <input type="file" id="imageUrl" (change)="onFileSelected($event)" />
+  </div>
+  <button type="submit">Add Candidate</button>
+</form>
