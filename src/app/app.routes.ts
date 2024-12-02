@@ -4,6 +4,7 @@ import {AuthGuard} from './auth.guard';
 import {CandidatesComponent} from './candidates/candidates.component';
 import {SignInComponent} from "./sign-in/sign-in.component";
 import {SignUpComponent} from "./sign-up/sign-up.component";
+import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
 
 export const routes: Routes = [
 
@@ -15,6 +16,9 @@ export const routes: Routes = [
   {
     path: 'sign-up',
     component: SignUpComponent,
+  },{
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
   },
   {
     path: 'candidates',
