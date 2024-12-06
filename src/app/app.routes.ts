@@ -5,6 +5,7 @@ import {CandidatesComponent} from './candidates/candidates.component';
 import {SignInComponent} from "./sign-in/sign-in.component";
 import {SignUpComponent} from "./sign-up/sign-up.component";
 import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
+import {UpdateCandidateComponent} from "./update-candidate/update-candidate.component";
 
 export const routes: Routes = [
 
@@ -36,6 +37,11 @@ export const routes: Routes = [
     component: AddAncicateComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'update-candidate/:id',
+    component: UpdateCandidateComponent,
+    canActivate: [AuthGuard]
+  }
 
 ];
 

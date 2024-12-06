@@ -21,8 +21,8 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatToolbar} from "@angular/material/toolbar";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {FireAuthService} from "../services/fireauth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-candidates',
@@ -52,18 +52,20 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   currentUser: any;
   role: string | null = null;
 
-  constructor(private firestoreService: FirestoreService, private router: Router, private authService: FireAuthService, private dialog: MatDialog, private breakpointObserver: BreakpointObserver) {
+  constructor(private firestoreService: FirestoreService,
+              private router: Router,
+              private authService: FireAuthService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
 
     this.currentUser = this.authService.getCurrentUser();
   }
 
   ngOnInit(): void {
-    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
-      this.isSmallScreen = result.matches;
-    });
     this.userId = this.authService.getCurrentUser();
+    console.log("this.userId=",this.userId)
     this.firestoreService.getUserRole().then(
-      (role:any) => {
+      (role: any) => {
         this.role = role;
       });
 
@@ -71,7 +73,6 @@ export class CandidatesComponent implements OnInit, OnDestroy {
   }
 
   toggleSideNav() {
-    // Logic for toggling the sidenav
   }
 
 
@@ -104,20 +105,17 @@ export class CandidatesComponent implements OnInit, OnDestroy {
     }
   }
 
-
   vote(candidateId: any) {
-    console.log("candidateId=", candidateId)
     this.firestoreService.hasVoted(this.userId).then(hasVoted => {
       if (hasVoted) {
         alert('You have already voted!');
       } else {
         this.firestoreService.incrementVote(candidateId)
           .then(() => {
-            // Store the vote in the userVotes collection
             this.firestoreService.recordVote(this.userId, candidateId)
               .then(() => {
                 console.log('Vote recorded');
-                this.getAllCandidates(); // Reload the candidates after voting
+                this.getAllCandidates();
               })
               .catch(error => {
                 console.error('Error recording vote:', error);
@@ -129,6 +127,21 @@ export class CandidatesComponent implements OnInit, OnDestroy {
       }
     }).catch(error => {
       console.error('Error checking if user has voted:', error);
+    });
+  }
+
+  deleteRecord(candidateId: any): void {
+    this.firestoreService.deleteRecord(candidateId).then(() => {
+      this.snackBar.open('Candidate deleted successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['success-snackbar'],
+      });
+      window.location.reload();
+    }).catch(error => {
+      this.snackBar.open('Error deleting candidate. Please try again.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+      });
     });
   }
 

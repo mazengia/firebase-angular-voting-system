@@ -69,13 +69,10 @@ export class FireAuthService {
       throw error;
     }
   }
-
-  // Sign out
   public async signOut(): Promise<void> {
     await this.auth.signOut();
   }
 
-  // Send password reset email
   public async sendPasswordResetEmail(email: string): Promise<void> {
     return sendPasswordResetEmail(this.auth, email);
   }

@@ -42,7 +42,27 @@ export class FirestoreService {
       throw error;
     }
   }
+  async updateRecord(documentId: string, updatedData: Partial<Candidate>): Promise<void> {
+    try {
+      const documentRef = doc(this.firestore, `candidates/${documentId}`);
+      await updateDoc(documentRef, updatedData);
+      console.log('Document updated successfully');
+    } catch (error) {
+      console.error('Error updating document: ', error);
+      throw error;
+    }
+  }
 
+  async deleteRecord(documentId: string): Promise<void> {
+    try {
+      const documentRef = doc(this.firestore, `candidates/${documentId}`);
+      await deleteDoc(documentRef);
+      console.log('Document deleted successfully');
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+      throw error;
+    }
+  }
   async addNewUser(user: Users,cred: UserCredential): Promise<void> {
     try {
 
@@ -56,7 +76,6 @@ export class FirestoreService {
     }
   }
 
-  // Record the user's vote in Firestore
   async recordVote(userId: string, candidateId: string): Promise<void> {
     await addDoc(collection(this.firestore, 'userVotes'), {
       userId: userId,
@@ -65,33 +84,44 @@ export class FirestoreService {
     });
   }
 
+  async getCandidateById(documentId: string): Promise<Candidate> {
+    const documentRef = doc(this.firestore, `candidates/${documentId}`);
+    try {
+      let docSnapshot = await getDoc(documentRef);
+      if (docSnapshot.exists()) {
+        return docSnapshot.data() as Candidate;
+      } else {
+        throw new Error('Document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching document:', error);
+      throw error;
+    }
+  }
+
   getAllCandidates(): Observable<Candidate[]> {
     const collectionRef = collection(this.firestore, 'candidates');
     return new Observable((observer) => {
       getDocs(collectionRef)
         .then((querySnapshot) => {
           if (querySnapshot.empty) {
-            observer.next([]); // No data found, return empty array
+            observer.next([]);
           } else {
-            // Calculate total votes
             const candidates = querySnapshot.docs.map(doc => {
               const candidate = doc.data() as Candidate;
-              candidate.documentId = doc.id;  // Attach the documentId to the candidate
+              candidate.documentId = doc.id;
               return candidate;
             });
 
             const totalVotes = candidates.reduce((sum, candidate) => sum + (candidate.voteCount || 0), 0);
-
-            // Calculate the percentage for each candidate
             const candidatesWithPercentage = candidates.map(candidate => {
               const percentage = totalVotes > 0 ? (candidate.voteCount / totalVotes) * 100 : 0;
               return {
                 ...candidate,
-                percentage: percentage.toFixed(2),  // Round to two decimal places
+                percentage: percentage.toFixed(2),
               };
             });
-
-            observer.next(candidatesWithPercentage); // Emit the candidate data with percentage
+            observer.next(candidatesWithPercentage);
           }
         })
         .catch((error) => {
@@ -102,62 +132,31 @@ export class FirestoreService {
   }
 
 
-  incrementVote(candidateId: string): Promise<void> {
+  async incrementVote(candidateId: string): Promise<void> {
     const candidateRef = doc(this.firestore, 'candidates', candidateId);
 
-    return getDoc(candidateRef)  // Check if the candidate document exists
-      .then(docSnap => {
-        if (!docSnap.exists()) {
-          console.error(`Candidate with ID ${candidateId} does not exist.`);
-          throw new Error(`Candidate with ID ${candidateId} does not exist.`);
-        }
-
-        // If the candidate exists, increment the vote count
-        return updateDoc(candidateRef, {
-          voteCount: increment(1), // Increment vote count
-        });
-      })
-      .catch(error => {
-        console.error('Error incrementing vote:', error);
-        throw error; // Rethrow error after logging it
+    try {
+      let docSnap = await getDoc(candidateRef);
+      if (!docSnap.exists()) {
+        console.error(`Candidate with ID ${candidateId} does not exist.`);
+        throw new Error(`Candidate with ID ${candidateId} does not exist.`);
+      }
+      return updateDoc(candidateRef, {
+        voteCount: increment(1),
       });
+    } catch (error) {
+      console.error('Error incrementing vote:', error);
+      throw error;
+    }
   }
 
-
-  // Check if the user has already voted
-  hasVoted(userId: string): Promise<boolean> {
+  async hasVoted(userId: string): Promise<boolean> {
     const userVotesQuery = query(
       collection(this.firestore, 'userVotes'),
       where('userId', '==', userId)
     );
-
-    return getDocs(userVotesQuery).then((snapshot) => !snapshot.empty); // Returns true if the user has voted
-  }
-
-
-  private async addDocument(collectionPath: string, data: any) {
-    const collectionRef = collection(this.firestore, collectionPath);
-    const doc = await addDoc(collectionRef, data);
-    return doc.id;
-  }
-
-  private async getDocument<T>(docPath: string): Promise<T | null> {
-    const docReference = doc(this.firestore, docPath);
-    const docSnap = await getDocFromServer(docReference);
-    if (docSnap.exists()) {
-      return docSnap.data() as T;
-    }
-    return null;
-  }
-
-  private async updateDocument(collectionPath: string, data: any): Promise<void> {
-    const docRef = doc(this.firestore, collectionPath);
-    await updateDoc(docRef, data);
-  }
-
-  private async deleteDocument(docPath: string): Promise<void> {
-    const docRef = doc(this.firestore, docPath);
-    await deleteDoc(docRef);
+    let snapshot = await getDocs(userVotesQuery);
+    return !snapshot.empty;
   }
 
 

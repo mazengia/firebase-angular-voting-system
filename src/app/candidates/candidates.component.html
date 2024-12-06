@@ -5,7 +5,7 @@
   <span>Candidates</span>
   <span class="spacer"></span>
   <button mat-button routerLink="/home">Home</button>
-  <button *ngIf="this.role=='member'" mat-button routerLink="/add-candidate">
+  <button  *ngIf="this.role=='member'" mat-button routerLink="/add-candidate">
     Add Candidate
   </button>
   <button mat-button (click)="logout()">Logout</button>
@@ -26,12 +26,14 @@
               (click)="vote(candidate?.documentId)">
         Vote
       </button>
-      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
-              color="primary" (click)="vote(candidate?.documentId)">
+      <button *ngIf="this.role=='member'&& (candidate?.percentage == 'NaN'|| candidate?.percentage == 0.00)"
+              class="btn-vote" mat-flat-button
+              color="primary" [routerLink]="['/update-candidate', candidate?.documentId]">
         Edit
       </button>
-      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
-              color="primary" (click)="vote(candidate?.documentId)">
+      <button *ngIf="this.role=='member'&& (candidate?.percentage == 'NaN'|| candidate?.percentage == 0.00)"
+              class="btn-vote" mat-flat-button
+              color="primary" (click)="deleteRecord(candidate?.documentId)">
         Delete
       </button>
     </mat-card-actions>

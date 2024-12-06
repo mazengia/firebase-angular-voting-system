@@ -12,5 +12,9 @@
     <label for="imageUrl">Image:</label>
     <input type="file" id="imageUrl" (change)="onFileSelected($event)" />
   </div>
+  <div *ngIf="imagePreviewUrl">
+    <img [src]="imagePreviewUrl" alt="Image preview" style="width: 100%;" />
+  </div>
+
   <button type="submit">Add Candidate</button>
 </form>

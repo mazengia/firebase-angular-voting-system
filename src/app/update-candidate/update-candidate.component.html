@@ -1,0 +1,30 @@
+<h2>Update Candidate</h2>
+<form (ngSubmit)="updateCandidate()">
+  <div>
+    <label for="updateName">Full Name:</label>
+    <input
+      type="text"
+      id="updateName"
+      [(ngModel)]="updatedCandidate.name"
+      name="updateName"
+      required
+    />
+  </div>
+  <div>
+    <label for="updateDescription">Slogan:</label>
+    <textarea
+      id="updateDescription"
+      [(ngModel)]="updatedCandidate.description"
+      name="updateDescription"
+      required
+    ></textarea>
+  </div>
+  <div>
+    <label for="updateImageUrl">Image:</label>
+    <input type="file" id="updateImageUrl" (change)="onUpdateFileSelected($event)" />
+  </div>
+  <div *ngIf="imagePreviewUrl">
+    <img [src]="imagePreviewUrl" alt="Image preview" style="width: 100%" />
+  </div>
+  <button type="submit">Update Candidate</button>
+</form>
