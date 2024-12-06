@@ -6,16 +6,16 @@ import {FireStorageService} from "../services/firestorage.service";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-add-ancicate',
+  selector: 'app-add-candidate',
   standalone: true,
-  templateUrl: './add-ancicate.component.html',
+  templateUrl: './add-candidate.component.html',
   imports: [
     FormsModule,
     NgIf
   ],
-  styleUrl: './add-ancicate.component.css'
+  styleUrl: './add-candidate.component.css'
 })
-export class AddAncicateComponent {
+export class AddCandidateComponent {
   id = '';
   name = '';
   description = '';
