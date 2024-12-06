@@ -1,0 +1,143 @@
+.responsive-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.candidate-container {
+  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.candidate-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.candidate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.candidate-card img {
+  object-fit: cover;
+  height: 150px;
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+mat-card-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+mat-card-actions button,
+mat-card-actions a {
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .responsive-toolbar span {
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  .candidate-container {
+    margin: 8px;
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-container h2 {
+    text-align: center;
+  }
+}
+
+/* Style for View Slogan button */
+.btn-slogan {
+  background-color: #f5f5f5;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-slogan:hover {
+  background-color: #e0e0e0;
+  color: #333;
+  transform: scale(1.05);
+}
+.btn-vote {
+  background-color: #1976d2;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-vote:hover {
+  background-color: #1565c0;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Add responsive button styles for smaller screens */
+@media (max-width: 768px) {
+  .btn-slogan,
+  .btn-vote {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+
+/* Center the dialog on the screen */
+.centered-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-dialog-container {
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  background: #fff;
+}
+
+

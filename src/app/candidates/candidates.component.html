@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" class="responsive-toolbar">
+  <button mat-icon-button class="menu-icon" *ngIf="isSmallScreen" (click)="toggleSideNav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Candidates</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/home">Home</button>
+  <button *ngIf="this.role=='member'" mat-button routerLink="/add-candidate">
+    Add Candidate
+  </button>
+  <button mat-button (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<div class="candidate-container">
+  <mat-card class="candidate-card" *ngFor="let candidate of candidates">
+    <mat-card-header>
+      <mat-card-title>{{ candidate?.name }}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="candidate?.imageUrl" alt="Candidate"/>
+    <p> {{ candidate?.percentage == "NaN" ? 0 : candidate?.percentage }}%</p>
+    <mat-card-actions>
+      <button class="btn-slogan" mat-button (click)="openDescriptionDialog(candidate?.description)">
+        View Slogan
+      </button>
+      <button *ngIf="this.role=='voter'" class="btn-vote" mat-flat-button color="primary"
+              (click)="vote(candidate?.documentId)">
+        Vote
+      </button>
+      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
+              color="primary" (click)="vote(candidate?.documentId)">
+        Edit
+      </button>
+      <button *ngIf="this.role=='member'&& candidate?.percentage == 'NaN'" class="btn-vote" mat-flat-button
+              color="primary" (click)="vote(candidate?.documentId)">
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+
+
+
